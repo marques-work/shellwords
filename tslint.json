@@ -1,0 +1,58 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+   "tslint:recommended"
+  ],
+  "rules": {
+    // retain these
+    "one-variable-per-declaration": false,
+    "max-line-length": false,
+    "array-type": [true, "array-simple"],
+    "object-literal-key-quotes":[true, "consistent-as-needed"],
+    "no-consecutive-blank-lines": true,
+    "no-namespace": false,
+    "no-shadowed-variable": false,
+    "quotemark": [
+      false
+    ],
+    "member-access": false,
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
+    "max-classes-per-file": false,
+    "object-literal-sort-keys": false,
+    "trailing-comma": false,
+    "comment-format": false,
+    "typedef-whitespace": [true,   {
+      "call-signature": "nospace",
+      "index-signature": "nospace",
+      "parameter": "nospace",
+      "property-declaration": "nospace",
+      "variable-declaration": "nospace"
+    }],
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          "public-static-field",
+          "private-static-field",
+
+          "public-instance-field",
+          "private-instance-field",
+
+          "public-constructor",
+          "private-constructor",
+
+          "public-static-method",
+          "public-instance-method",
+          "protected-instance-method",
+
+          "private-static-method",
+          "private-instance-method"
+        ]
+      }
+    ]
+  },
+  "rulesDirectory": []
+}

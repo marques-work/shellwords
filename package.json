@@ -1,22 +1,32 @@
 {
-  "author": "Jimmy Cuadra <jimmy@jimmycuadra.com> (http://jimmycuadra.com/)",
-  "name": "shellwords",
-  "description": "Manipulate strings according to the word parsing rules of the UNIX Bourne shell.",
-  "version": "0.1.1",
-  "homepage": "https://github.com/jimmycuadra/shellwords",
+  "author": "Marques Lee <marques.b.lee@gmail.com>",
+  "name": "shellwords-ts",
+  "description": "JS lib with TS typings to manipulate strings according to the word parsing rules of the UNIX Bourne shell.",
+  "version": "1.0.0",
+  "homepage": "https://github.com/marques-work/shellwords",
   "repository": {
     "type": "git",
-    "url": "git://github.com/jimmycuadra/shellwords.git"
+    "url": "git://github.com/marques-work/shellwords.git"
   },
-  "main": "./lib/shellwords",
-  "files": ["lib"],
+  "main": "./dist/shellwords.js",
+  "types": "./dist/shellwords.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "cake spec"
+    "build": "tsc -p .",
+    "lint": "tslint --fix --format stylish --project tsconfig.json --config tslint.json",
+    "test": "mocha --require ts-node/register --watch-extensions ts,tsx \"spec/**/*_spec.{ts,tsx}\""
   },
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "jasmine-node": "~1.0.26",
-    "nodewatch": "~0.1.0"
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "ts-node": "^8.1.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
   }
 }
