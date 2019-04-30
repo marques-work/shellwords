@@ -1,6 +1,6 @@
 # Shellwords-TS
 
-Typescript port of [shellwords]()Shellwords provides functions to manipulate strings according to the word parsing rules of the UNIX Bourne shell. It is based on [the Ruby module of the same name](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/shellwords/rdoc/Shellwords.html).
+Typescript port of [shellwords](https://github.com/jimmycuadra/shellwords). Shellwords provides functions to manipulate strings according to the word parsing rules of the UNIX Bourne shell. It is based on [the Ruby module of the same name](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/shellwords/rdoc/Shellwords.html).
 
 ## Installation
 
