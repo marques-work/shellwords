@@ -40,7 +40,7 @@ function rgx(tmplObj: TemplateStringsArray, ...subst: string[]) {
 
 const SHELL_PARSE_REGEX = rgx`
 \s*                     # Leading whitespace
-(?:                       #
+(?=(                      # Mimic "(?>)" -> http://blog.stevenlevithan.com/archives/mimic-atomic-groups
   ([^\s\\\'\"]+)          # Normal words
   |                       #
   '([^\']*)'              # Stuff in single quotes
@@ -50,7 +50,7 @@ const SHELL_PARSE_REGEX = rgx`
   (\\.?)                  # Escaped character
   |                       #
   (\S)                    # Garbage
-)                         #
+))\1                      #
 (\s|$)?                 # Seperator
 `;
 
@@ -60,7 +60,7 @@ class Shellwords {
     let field: string = "";
     let rawParsed = "";
     scan(line, SHELL_PARSE_REGEX, (match: RegExpMatchArray) => {
-      const [raw, word, sq, dq, esc, garbage, seperator] = match;
+      const [raw, , word, sq, dq, esc, garbage, seperator] = match;
 
       if ("string" === typeof garbage) {
         throw new Error("Unmatched quote");

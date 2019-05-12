@@ -31,7 +31,7 @@ function rgx(tmplObj) {
     var txt2 = regexText.replace(wsrgx, '');
     return new RegExp(txt2, "m");
 }
-var SHELL_PARSE_REGEX = rgx(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\ns*                     # Leading whitespace\n(?:                       #\n  ([^s\\'\"]+)          # Normal words\n  |                       #\n  '([^']*)'              # Stuff in single quotes\n  |                       #\n  \"((?:[^\"\\]|\\.)*)\"    # Stuff in double quotes\n  |                       #\n  (\\.?)                  # Escaped character\n  |                       #\n  (S)                    # Garbage\n)                         #\n(s|$)?                 # Seperator\n"], ["\n\\s*                     # Leading whitespace\n(?:                       #\n  ([^\\s\\\\\\'\\\"]+)          # Normal words\n  |                       #\n  '([^\\']*)'              # Stuff in single quotes\n  |                       #\n  \"((?:[^\\\"\\\\]|\\\\.)*)\"    # Stuff in double quotes\n  |                       #\n  (\\\\.?)                  # Escaped character\n  |                       #\n  (\\S)                    # Garbage\n)                         #\n(\\s|$)?                 # Seperator\n"])));
+var SHELL_PARSE_REGEX = rgx(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\ns*                     # Leading whitespace\n(?=(                      # Mimic \"(?>)\" -> http://blog.stevenlevithan.com/archives/mimic-atomic-groups\n  ([^s\\'\"]+)          # Normal words\n  |                       #\n  '([^']*)'              # Stuff in single quotes\n  |                       #\n  \"((?:[^\"\\]|\\.)*)\"    # Stuff in double quotes\n  |                       #\n  (\\.?)                  # Escaped character\n  |                       #\n  (S)                    # Garbage\n))1                      #\n(s|$)?                 # Seperator\n"], ["\n\\s*                     # Leading whitespace\n(?=(                      # Mimic \"(?>)\" -> http://blog.stevenlevithan.com/archives/mimic-atomic-groups\n  ([^\\s\\\\\\'\\\"]+)          # Normal words\n  |                       #\n  '([^\\']*)'              # Stuff in single quotes\n  |                       #\n  \"((?:[^\\\"\\\\]|\\\\.)*)\"    # Stuff in double quotes\n  |                       #\n  (\\\\.?)                  # Escaped character\n  |                       #\n  (\\S)                    # Garbage\n))\\1                      #\n(\\s|$)?                 # Seperator\n"])));
 var Shellwords = (function () {
     function Shellwords() {
     }
@@ -40,7 +40,7 @@ var Shellwords = (function () {
         var field = "";
         var rawParsed = "";
         scan(line, SHELL_PARSE_REGEX, function (match) {
-            var raw = match[0], word = match[1], sq = match[2], dq = match[3], esc = match[4], garbage = match[5], seperator = match[6];
+            var raw = match[0], word = match[2], sq = match[3], dq = match[4], esc = match[5], garbage = match[6], seperator = match[7];
             if ("string" === typeof garbage) {
                 throw new Error("Unmatched quote");
             }
