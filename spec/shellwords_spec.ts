@@ -147,6 +147,11 @@ describe("Shellwords", () => {
 
     it("args with spaces", () => {
       expect(Shellwords.join(["find", "/users/my user",])).to.equal("find /users/my\\ user");
+      expect(Shellwords.join(["find", "~/Library/Application Support", "-name", "*.plist"])).to.equal("find \\~/Library/Application\\ Support -name \\*.plist");
+    });
+
+    it("args with quotes", () => {
+      expect(Shellwords.join(["echo", `"hi" there`])).to.equal("echo \\\"hi\\\"\\ there");
     });
   });
 

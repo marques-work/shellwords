@@ -15,6 +15,7 @@ import Shellwords from "shellwords-ts";
 
 Shellwords.split("foo 'bar baz'"); // ["foo", "bar baz"]
 Shellwords.escape("What's up?"); // "What\\'s\\ up\\?"
+Shellwords.join(["find", "~/Library/Application Support", "-name", "*.plist"]); // "find \\~/Library/Application\\ Support -name \\*.plist"
 
 Shellwords.split("foo 'bar baz' quu", (rawPart) => {
   // have access to the chunks of the raw string as it is scanned
