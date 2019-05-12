@@ -35,7 +35,7 @@ function rgx(tmplObj: TemplateStringsArray, ...subst: string[]) {
     // Remove white-space and comments
     const wsrgx = /^\s+|\s+\n|\s*#[\s\S]*?\n|\n/gm;
     const txt2 = regexText.replace(wsrgx, '');
-    return new RegExp(txt2);
+    return new RegExp(txt2, "m");
 }
 
 const SHELL_PARSE_REGEX = rgx`
@@ -56,23 +56,21 @@ const SHELL_PARSE_REGEX = rgx`
 
 class Shellwords {
   split(line: string, callback?: (rawToken: string) => void): string[] {
-    line = line || "";
-
     const words: string[] = [];
-    let field = "";
+    let field: string = "";
     let rawParsed = "";
     scan(line, SHELL_PARSE_REGEX, (match: RegExpMatchArray) => {
       const [raw, word, sq, dq, esc, garbage, seperator] = match;
 
-      if (garbage != null) {
+      if ("string" === typeof garbage) {
         throw new Error("Unmatched quote");
       }
 
       rawParsed += raw;
 
-      field += word || (sq || dq || esc).replace(/\\(?=.)/, "");
+      field += (word || sq || (dq && dq.replace(/\\([$`"\\\n])/g, "$1")) || (esc || "").replace(/\\(.)/g, "$1"));
 
-      if ("string" === typeof seperator) {
+      if ("string" === typeof seperator || "" === sq || "" === dq) {
         words.push(field);
         if ("function" === typeof callback) {
           callback(rawParsed);
@@ -93,6 +91,14 @@ class Shellwords {
       return "''";
     }
     return raw.replace(/([^A-Za-z0-9_\-.,:\/@\n])/g, "\\$1").replace(/\n/g, "'\n'");
+  }
+
+  join(strings: string[]): string {
+    const results: string[] = [];
+    for (const s of strings) {
+      results.push(this.escape(s));
+    }
+    return results.join(" ");
   }
 }
 
