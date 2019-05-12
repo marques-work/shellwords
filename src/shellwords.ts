@@ -43,7 +43,7 @@ const SHELL_PARSE_REGEX = rgx`
 (?:                       #
   ([^\s\\\'\"]+)          # Normal words
   |                       #
-  '((?:[^\'\\]|\\.)*)'    # Stuff in single quotes
+  '([^\']*)'              # Stuff in single quotes
   |                       #
   "((?:[^\"\\]|\\.)*)"    # Stuff in double quotes
   |                       #

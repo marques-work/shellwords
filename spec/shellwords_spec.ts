@@ -37,7 +37,10 @@ describe("Shellwords", () => {
       let results = Shellwords.split('foo "bar\\" baz"');
       expect(results).to.deep.equal(['foo', 'bar" baz']);
 
-      results = Shellwords.split("foo 'bar\\' baz'");
+      results = Shellwords.split(`foo "bar' baz"`);
+      expect(results).to.deep.equal(["foo", "bar' baz"]);
+
+      results = Shellwords.split(`foo "bar\\' baz"`);
       expect(results).to.deep.equal(["foo", "bar' baz"]);
     });
 
