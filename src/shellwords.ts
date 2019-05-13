@@ -54,52 +54,60 @@ const SHELL_PARSE_REGEX = rgx`
 (\s|$)?                 # Seperator
 `;
 
-class Shellwords {
-  split(line: string, callback?: (rawToken: string) => void): string[] {
-    const words: string[] = [];
-    let field: string = "";
-    let rawParsed = "";
-    scan(line, SHELL_PARSE_REGEX, (match: RegExpMatchArray) => {
-      const [raw, , word, sq, dq, esc, garbage, seperator] = match;
+export function split(line: string, callback?: (rawToken: string) => void): string[] {
+  const words: string[] = [];
+  let field: string     = "";
+  let rawParsed         = "";
 
-      if ("string" === typeof garbage) {
-        throw new Error("Unmatched quote");
-      }
+  scan(line, SHELL_PARSE_REGEX, (match: RegExpMatchArray) => {
+    const [raw, , word, sq, dq, esc, garbage, seperator] = match;
 
-      rawParsed += raw;
+    if ("string" === typeof garbage) {
+      throw new Error("Unmatched quote");
+    }
 
-      field += (word || sq || (dq && dq.replace(/\\([$`"\\\n])/g, "$1")) || (esc || "").replace(/\\(.)/g, "$1"));
+    rawParsed += raw;
 
-      if ("string" === typeof seperator || "" === sq || "" === dq) {
-        words.push(field);
-        if ("function" === typeof callback) {
-          callback(rawParsed);
-        }
-        rawParsed = "";
-        return field = "";
-      }
-    });
+    field += (word || sq || (dq && dq.replace(/\\([$`"\\\n])/g, "$1")) || (esc || "").replace(/\\(.)/g, "$1"));
 
-    if (field) {
+    if ("string" === typeof seperator || "" === sq || "" === dq) {
       words.push(field);
+
+      if ("function" === typeof callback) {
+        callback(rawParsed);
+      }
+
+      rawParsed = "";
+      return field = "";
     }
-    return words;
+  });
+
+  if (field) {
+    words.push(field);
   }
 
-  escape(raw: string): string {
-    if (!raw) {
-      return "''";
-    }
-    return raw.replace(/([^A-Za-z0-9_\-.,:\/@\n])/g, "\\$1").replace(/\n/g, "'\n'");
-  }
+  return words;
+}
 
-  join(strings: string[]): string {
-    const results: string[] = [];
-    for (const s of strings) {
-      results.push(this.escape(s));
-    }
-    return results.join(" ");
+export function escape(raw: string): string {
+  if (!raw) {
+    return "''";
   }
+  return raw.replace(/([^A-Za-z0-9_\-.,:\/@\n])/g, "\\$1").replace(/\n/g, "'\n'");
+}
+
+export function join(strings: string[]): string {
+  const results: string[] = [];
+  for (const s of strings) {
+    results.push(escape(s));
+  }
+  return results.join(" ");
+}
+
+class Shellwords {
+  split  = split;
+  escape = escape;
+  join   = join;
 }
 
 export default new Shellwords();
