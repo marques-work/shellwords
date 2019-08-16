@@ -55,7 +55,7 @@ function split(line, callback) {
     if (field) {
         words.push(field);
         if ("function" === typeof callback) {
-            callback(field);
+            callback(rawParsed);
         }
     }
     return words;

@@ -130,8 +130,8 @@ describe("Shellwords", () => {
         tokens.push(token);
       }
 
-      Shellwords.split(`foo "bar' baz" quu`, callback);
-      expect(tokens).to.deep.equal(["foo ", `"bar' baz" `, "quu"]);
+      Shellwords.split(`foo "bar' baz" quu a\\ and\\ b`, callback);
+      expect(tokens).to.deep.equal(["foo ", `"bar' baz" `, "quu ", "a\\ and\\ b"]);
     });
 
     it("runs callback() when a command has no arguments", () => {
@@ -141,8 +141,8 @@ describe("Shellwords", () => {
         tokens.push(token);
       }
 
-      Shellwords.split("foo", callback);
-      expect(tokens).to.deep.equal(["foo"]);
+      Shellwords.split("a\\ and\\ b", callback);
+      expect(tokens).to.deep.equal(["a\\ and\\ b"]);
     });
   });
 

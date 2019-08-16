@@ -56,7 +56,7 @@ const SHELL_PARSE_REGEX = rgx`
 
 export function split(line: string, callback?: (rawToken: string) => void): string[] {
   const words: string[] = [];
-  let field: string     = "";
+  let field             = "";
   let rawParsed         = "";
 
   scan(line, SHELL_PARSE_REGEX, (match: RegExpMatchArray) => {
@@ -86,7 +86,7 @@ export function split(line: string, callback?: (rawToken: string) => void): stri
     words.push(field);
 
     if ("function" === typeof callback) {
-      callback(field);
+      callback(rawParsed);
     }
   }
 
