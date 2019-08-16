@@ -87,7 +87,7 @@ describe("Shellwords", () => {
     });
 
     it("splits double quoted phrases", () => {
-      const results = Shellwords.split('"foo bar" baz');
+      const results = Shellwords.split(`"foo bar" baz`);
       expect(results).to.deep.equal(["foo bar", "baz"]);
     });
 
@@ -102,25 +102,47 @@ describe("Shellwords", () => {
     });
 
     it("respects escaped characters within double quotes", () => {
-      const results = Shellwords.split('foo "bar\\ baz"');
+      const results = Shellwords.split(`foo "bar\\ baz"`);
       expect(results).to.deep.equal(["foo", "bar\\ baz"]);
     });
 
     it("respects escaped quotes within quotes", () => {
-      let results = Shellwords.split('foo "bar\\" baz"');
+      let results = Shellwords.split(`foo "bar\\" baz"`);
       expect(results).to.deep.equal(["foo", "bar\" baz"]);
 
-      results = Shellwords.split('foo "bar\' baz"');
+      results = Shellwords.split(`foo "bar\' baz"`);
       expect(results).to.deep.equal(["foo", "bar' baz"]);
 
-      results = Shellwords.split("foo \"bar\\' baz\"");
+      results = Shellwords.split(`foo "bar\\' baz"`);
       expect(results).to.deep.equal(["foo", "bar\\' baz"]);
     });
 
     it("throws on unmatched quotes", () => {
-      expect(() => Shellwords.split('foo "bar baz')).to.throw("Unmatched quote");
+      expect(() => Shellwords.split(`foo "bar baz`)).to.throw("Unmatched quote");
       expect(() => Shellwords.split("foo 'bar baz")).to.throw("Unmatched quote");
       expect(() => Shellwords.split("one '\"\"\"")).to.throw("Unmatched quote");
+    });
+
+    it("runs callback() on each token when provided", () => {
+      const tokens: string[] = [];
+
+      function callback(token: string) {
+        tokens.push(token);
+      }
+
+      Shellwords.split(`foo "bar' baz" quu`, callback);
+      expect(tokens).to.deep.equal(["foo ", `"bar' baz" `, "quu"]);
+    });
+
+    it("runs callback() when a command has no arguments", () => {
+      const tokens: string[] = [];
+
+      function callback(token: string) {
+        tokens.push(token);
+      }
+
+      Shellwords.split("foo", callback);
+      expect(tokens).to.deep.equal(["foo"]);
     });
   });
 

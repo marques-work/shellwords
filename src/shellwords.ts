@@ -84,6 +84,10 @@ export function split(line: string, callback?: (rawToken: string) => void): stri
 
   if (field) {
     words.push(field);
+
+    if ("function" === typeof callback) {
+      callback(field);
+    }
   }
 
   return words;
