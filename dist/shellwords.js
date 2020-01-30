@@ -37,13 +37,13 @@ function split(line, callback) {
     var field = "";
     var rawParsed = "";
     scan(line, SHELL_PARSE_REGEX, function (match) {
-        var raw = match[0], word = match[2], sq = match[3], dq = match[4], esc = match[5], garbage = match[6], seperator = match[7];
+        var raw = match[0], word = match[2], sq = match[3], dq = match[4], esc = match[5], garbage = match[6], separator = match[7];
         if ("string" === typeof garbage) {
             throw new Error("Unmatched quote");
         }
         rawParsed += raw;
         field += (word || sq || (dq && dq.replace(/\\([$`"\\\n])/g, "$1")) || (esc || "").replace(/\\(.)/g, "$1"));
-        if ("string" === typeof seperator || "" === sq || "" === dq) {
+        if ("string" === typeof separator || "" === sq || "" === dq) {
             words.push(field);
             if ("function" === typeof callback) {
                 callback(rawParsed);
@@ -65,7 +65,7 @@ function escape(raw) {
     if (!raw) {
         return "''";
     }
-    return raw.replace(/([^A-Za-z0-9_\-.,:\/@\n])/g, "\\$1").replace(/\n/g, "'\n'");
+    return raw.replace(/[^A-Za-z0-9_\-.,:+\/@\n]/g, "\\$&").replace(/\n/g, "'\n'");
 }
 exports.escape = escape;
 function join(strings) {
